@@ -35,8 +35,8 @@ const userContextIdName = getPluginOptionName(pluginName, 'userContextId');
 
 // From our options.js
 // getPluginOptionName gets info from plugininfo.php
-const showReferencecountEnabled = getPluginOptionName(pluginName, 'showreferencecountenabled');
-const orphanedFilesCounterOnly = getPluginOptionName(pluginName, 'orphanedfilescounteronly');
+const showReferencecountEnabledName = getPluginOptionName(pluginName, 'showreferencecountenabled');
+const orphanedFilesCounterOnlyName = getPluginOptionName(pluginName, 'orphanedfilescounteronly');
 
 export const register = (editor) => {
     const registerOption = editor.options.register;
@@ -52,12 +52,12 @@ export const register = (editor) => {
     // 1. in options.js registrieren
     // 2. in options.js exportieren
     // Now we can access data from php in javascript.
-    registerOption(showReferencecountEnabled, {
+    registerOption(showReferencecountEnabledName, {
         processor: 'boolean',
         "default": false,
     });
 
-    registerOption(orphanedFilesCounterOnly, {
+    registerOption(orphanedFilesCounterOnlyName, {
         processor: 'boolean',
         "default": false,
     });
@@ -77,11 +77,10 @@ export const isInitialised = (editor) => {
     return editor.options.get(initialisedOptionName);
 };
 
-
 export const getUserContextId = (editor) => editor.options.get(userContextIdName);
 export const markInitialised = (editor) => editor.options.set(initialisedOptionName, true);
-export const getShowReferencecountEnabled = (editor) => editor.options.get(showReferencecountEnabled);
-export const getOrphanedFilesCounterOnly = (editor) => editor.options.get(orphanedFilesCounterOnly);
+export const getShowReferencecountEnabled = (editor) => editor.options.get(showReferencecountEnabledName);
+export const getOrphanedFilesCounterOnly = (editor) => editor.options.get(orphanedFilesCounterOnlyName);
 
 // Export information that where included in import-statement.
 export {
