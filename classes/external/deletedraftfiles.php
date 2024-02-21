@@ -76,9 +76,11 @@ class deletedraftfiles extends \external_api {
      */
     public static function execute($draftitemid, $files): array {
         global $USER;
-        require_login();
-        require_sesskey();
+        ['draftItemId' => $draftitemid, 'files' => $files] =
+                self::validate_parameters(self::execute_parameters(), ['draftItemId'=> $draftitemid, 'files' => $files]);
         $usercontext = \context_user::instance($USER->id);
+        self::validate_context($usercontext);
+
         // The parameter $files has not the correct structure so wie need to generate $fileObjects from $files.
         $fileobjects = [];
         foreach ($files as $file) {
