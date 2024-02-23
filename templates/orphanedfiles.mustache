@@ -92,7 +92,7 @@
                 <th scope="col" class="filename">{{#str}}tableheader:filename, tiny_orphanedfiles {{/str}}</th>
                 <th scope="col" class="filesize">{{#str}}tableheader:filesize, tiny_orphanedfiles {{/str}}</th>
                 <th scope="col" class="filepath">{{#str}}tableheader:filepath, tiny_orphanedfiles {{/str}}</th>
-                <th scope="col" class="creationdate">{{#str}}tableheader:creationdate, tiny_orphanedfiles {{/str}}</th>
+                <th scope="col" class="lastmodified">{{#str}}tableheader:lastmodified, tiny_orphanedfiles {{/str}}</th>
             </tr>
             </thead>
 
@@ -136,9 +136,9 @@
                         {{/websitesettings.showreferencecountenabled}}
                     </td>
 
-                    <td>{{filesize}}<br>{{dimensions}}</td>
+                    <td>{{filesize}}<br>{{#str}} dimensions, tiny_orphanedfiles {{/str}} {{dimensions}}</td>
                     <td>{{filepath}}</td>
-                    <td>{{datemodified_f_s}}</td>
+                    <td>{{datemodified_formated}}</td>
                 </tr>
             {{/orphanedFiles}}
             </tbody>

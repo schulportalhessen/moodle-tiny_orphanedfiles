@@ -111,6 +111,16 @@ export default class OrphanedfilesManager {
             // Get *files* from filename and filepath strings in editor (by filtering allFilesSet
             for (const file of this.allFilesSet) {
                 file.className = 'file-' + i;
+                // Add individual information about the file e.g. dimensions, formated last modified date, ...
+                if (file.image_width && file.image_height ) {
+                    file.dimensions = `${file.image_width}✕${file.image_height}`;
+                } else {
+                    file.dimensions = '';
+                }
+                const newDate = new Date(file.datemodified * 1000);
+                const dateString = newDate.toLocaleString();
+                file.datemodified_formated = dateString;
+
                 if (_usedFilesSet.has(file.filepath + file.filename)) {
                     this.usedFilesSet.add(file);
                 }

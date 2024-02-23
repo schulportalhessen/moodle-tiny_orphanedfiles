@@ -29,6 +29,7 @@ $string['areaheadingorphanedfilescounteronly'] = 'orphaned/unused files in filea
 $string['areainfo'] = 'In this table you can see orphaned files that are stored in this context but are no longer linked in this editor.<br>Attention: There might be exists links from other context that use som of these listed files.';
 $string['deleteselected'] = 'Delete selected files <i class="fa fa-trash" title="Delete all selected files"></i>';
 $string['details-hasreference-tooltip'] = 'This file is referenced in other textfields or context.';
+$string['dimensions'] = 'dimensions:';
 $string['details-referencecounter'] = 'References:';
 $string['downloadlink'] = 'download file';
 $string['isactive'] = 'Is activ for all users';
@@ -40,7 +41,7 @@ $string['orphanedfilescounteronly_desc'] = 'If enabled, there will be no table b
 $string['pluginname'] = 'Tiny orphaned files';
 $string['showreferencecountenabled'] = 'Show referencecounter';
 $string['showreferencecountenabled_desc'] = 'If enabled, the number of references is shown. ';
-$string['tableheader:creationdate'] = 'Date';
+$string['tableheader:lastmodified'] = 'Last modified';
 $string['tableheader:delete'] = '<i class="fa fa-trash" title="Delete this file"></i>';
 $string['tableheader:filename'] = 'Filename';
 $string['tableheader:filename'] = 'Filename';
