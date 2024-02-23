@@ -136,7 +136,7 @@
                         {{/websitesettings.showreferencecountenabled}}
                     </td>
 
-                    <td>{{filesize}}<br>{{#str}} dimensions, tiny_orphanedfiles {{/str}} {{dimensions}}</td>
+                    <td>{{filesize}}{{#dimensions}}<br>{{.}}{{/dimensions}}</td>
                     <td>{{filepath}}</td>
                     <td>{{datemodified_formated}}</td>
                 </tr>
