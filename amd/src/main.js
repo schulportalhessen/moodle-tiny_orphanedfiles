@@ -36,11 +36,12 @@ export const register = (editor) => {
     let orphanedfilesmanager = null;
 
     editor.on('input', () => {
-        orphanedfilesmanager.renderBody();
+        orphanedfilesmanager.update();
+
     });
 
     editor.on('focus', () => {
-        orphanedfilesmanager.renderBody();
+        orphanedfilesmanager.update();
     });
 
     editor.on('init', () => {
@@ -58,6 +59,6 @@ export const register = (editor) => {
 
         orphanedfilesmanager = new OrphanedFilesManager(params, editor);
         orphanedfilesmanager.createOrphanedArea();
-        orphanedfilesmanager.renderBody();
+        orphanedfilesmanager.update();
     });
 };

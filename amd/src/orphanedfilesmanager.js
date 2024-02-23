@@ -50,6 +50,8 @@ export default class OrphanedfilesManager {
         this.usedFilesSet = new Set(); // Set of file strings(!)
         this.orphanedFilesSet = new Set(); // files
         this.deletedFilesSet = new Set(); // files
+        this.oldOrphanedFilesSet = new Set();
+        this.changed = false;
     }
 
     /**
@@ -136,9 +138,20 @@ export default class OrphanedfilesManager {
      * @returns {*[]}
      */
     updateOrphanedFiles() {
+
         return new Promise((resolve) => {
+            this.oldOrphanedFilesSet = this.orphanedFilesSet;
             this.orphanedFilesSet = new Set([...this.allFilesSet].filter(element => !this.usedFilesSet.has(element)));
-            resolve(); // Erfolgreich aufgelöst
+            // ToDo: Compare the sets if there are changes and if update the rendering is needed.
+            // console.log("oldOrphanedFilesSet" , this.oldOrphanedFilesSet);
+            // console.log("orphanedFilesSet" , this.orphanedFilesSet);
+            const setsareequal = this.orphanedFilesSet.size ===  this.oldOrphanedFilesSet.size;
+            if (!setsareequal) {
+                this.changed = true;
+            } else {
+                this.changed = false;
+            }
+            resolve();
         });
     }
 
@@ -162,54 +175,65 @@ export default class OrphanedfilesManager {
             for (const file of files) {
                 this.deletedFilesSet.add(this._get_file_identifier(file));
             }
-            this.renderBody();
-
+            this.update();
         });
     }
 
-    renderBody() {
-        const websitesettings = Array();
-        // Just for documentation purpose: We can access settings by two different ways.
-        // We can access Options-Object or the data stored during construction.
-        websitesettings['showreferencecountenabled'] = this.showReferenceCountEnabled;
-        websitesettings['orphanedfilescounteronly'] = this.orphanedFilesCounterOnly;
-        this.bodyDiv.classList.remove('hidden');
+    update() {
         this.updateAllFiles().then(() => {
             return this.updateUsedFiles();
         }).then(() => {
             return this.updateOrphanedFiles();
         }).then(() => {
-            const numberoforphanedfiles = this.orphanedFilesSet.size;
-            if (numberoforphanedfiles !== 0) {
-                var orphanedfilescounteronly = this.orphanedFilesCounterOnly;
-                if (orphanedfilescounteronly) {
-                    const context = {
-                        // Data to be rendered
-                        numberoforphanedfiles: numberoforphanedfiles,
-                    };
-                    Templates.renderForPromise('tiny_orphanedfiles/orphanedfilescounteronly', context).then(({html, js}) => {
-                        Templates.replaceNodeContents(`.orphaned-files-content-${this.elementId}`, html, js);
-                    });
-                } else {
-                    const context = {
-                        // Data to be rendered
-                        orphanedFiles: Array.from(this.orphanedFilesSet),
-                        numberoforphanedfiles: numberoforphanedfiles,
-                        websitesettings: websitesettings,
-                    };
-                    // Display Orphaned-Files-Table
-                    Templates.renderForPromise('tiny_orphanedfiles/orphanedfiles', context).then(({html, js}) => {
-                        Templates.replaceNodeContents(`.orphaned-files-content-${this.elementId}`, html, js);
-                    }).then(() => {
-                        // Add Listener to dynamic items in Orphaned-Files-Table e.g. Delete Buttons
-                        return this.registerListener(Array.from(this.orphanedFilesSet));
-                    }).catch((error) => displayException(error));
-                }
+            if (!this.changed) {
             } else {
-                this.bodyDiv.classList.add('hidden');
+                // Only render Body if orphaned files changed
+                this.bodyDiv.classList.remove('hidden');
+                this.renderBody();
             }
-            return null;
         });
+        this.changed = false;
+    }
+
+    renderBody() {
+        // console.log("renderBody");
+        // console.log("this.changed", this.changed);
+        const websitesettings = Array();
+        // Just for documentation purpose: We can access settings by two different ways.
+        // We can access Options-Object or the data stored during construction.
+        websitesettings['showreferencecountenabled'] = this.showReferenceCountEnabled;
+        websitesettings['orphanedfilescounteronly'] = this.orphanedFilesCounterOnly;
+        const numberoforphanedfiles = this.orphanedFilesSet.size;
+        if (numberoforphanedfiles !== 0) {
+            var orphanedfilescounteronly = this.orphanedFilesCounterOnly;
+            if (orphanedfilescounteronly) {
+                const context = {
+                    // Data to be rendered
+                    numberoforphanedfiles: numberoforphanedfiles,
+                };
+                Templates.renderForPromise('tiny_orphanedfiles/orphanedfilescounteronly', context).then(({html, js}) => {
+                    Templates.replaceNodeContents(`.orphaned-files-content-${this.elementId}`, html, js);
+                });
+            } else {
+                const context = {
+                    // Data to be rendered
+                    orphanedFiles: Array.from(this.orphanedFilesSet),
+                    numberoforphanedfiles: numberoforphanedfiles,
+                    websitesettings: websitesettings,
+                };
+                // Display Orphaned-Files-Table
+                Templates.renderForPromise('tiny_orphanedfiles/orphanedfiles', context).then(({html, js}) => {
+                    Templates.replaceNodeContents(`.orphaned-files-content-${this.elementId}`, html, js);
+                }).then(() => {
+                    // Add Listener to dynamic items in Orphaned-Files-Table e.g. Delete Buttons
+                    return this.registerListener(Array.from(this.orphanedFilesSet));
+                }).catch((error) => displayException(error));
+            }
+        } else {
+
+            this.bodyDiv.classList.add('hidden');
+        }
+        return null;
     }
 
     /**
