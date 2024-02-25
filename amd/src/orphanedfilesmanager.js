@@ -181,14 +181,6 @@ export default class OrphanedfilesManager {
     }
 
     renderBody() {
-        // console.log("renderBody");
-        // console.log("this.oldOrphanedFilesSet", this.oldOrphanedFilesSet);
-        // console.log("this.orphanedFilesSet", this.orphanedFilesSet);
-        const websitesettings = Array();
-        // Just for documentation purpose: We can access settings by two different ways.
-        // We can access Options-Object or the data stored during construction.
-        websitesettings['showreferencecountenabled'] = this.showReferenceCountEnabled;
-        websitesettings['orphanedfilescounteronly'] = this.orphanedFilesCounterOnly;
         const numberoforphanedfiles = this.orphanedFilesSet.size;
         if (numberoforphanedfiles !== 0) {
             var orphanedfilescounteronly = this.orphanedFilesCounterOnly;
@@ -201,6 +193,11 @@ export default class OrphanedfilesManager {
                     Templates.replaceNodeContents(`.orphaned-files-content-${this.elementId}`, html, js);
                 });
             } else {
+                const websitesettings = Array();
+                // Just for documentation purpose: We can access settings by two different ways.
+                // We can access Options-Object or the data stored during construction.
+                websitesettings['showreferencecountenabled'] = this.showReferenceCountEnabled;
+                websitesettings['orphanedfilescounteronly'] = this.orphanedFilesCounterOnly;
                 const context = {
                     // Data to be rendered
                     orphanedFiles: Array.from(this.orphanedFilesSet),
@@ -216,7 +213,9 @@ export default class OrphanedfilesManager {
                 }).catch((error) => displayException(error));
             }
         } else {
-
+            // Todo: IF number orphanedfiles is 0 but the user has used the undo then there is still a table
+            // in the dom that contains a list of files but this tablelist is now set as hidden.
+            // Maybe we better also remove this content from the dom.
             this.bodyDiv.classList.add('hidden');
         }
         return null;
