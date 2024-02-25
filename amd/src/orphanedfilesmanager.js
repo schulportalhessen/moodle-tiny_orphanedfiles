@@ -51,7 +51,7 @@ export default class OrphanedfilesManager {
         this.orphanedFilesSet = new Set(); // files
         this.deletedFilesSet = new Set(); // files
         this.oldOrphanedFilesSet = new Set();
-        this.changed = false;
+        //this.changed = false;
     }
 
     /**
@@ -138,19 +138,9 @@ export default class OrphanedfilesManager {
      * @returns {*[]}
      */
     updateOrphanedFiles() {
-
         return new Promise((resolve) => {
             this.oldOrphanedFilesSet = this.orphanedFilesSet;
             this.orphanedFilesSet = new Set([...this.allFilesSet].filter(element => !this.usedFilesSet.has(element)));
-            // ToDo: Compare the sets if there are changes and if update the rendering is needed.
-            // console.log("oldOrphanedFilesSet" , this.oldOrphanedFilesSet);
-            // console.log("orphanedFilesSet" , this.orphanedFilesSet);
-            const setsareequal = this.orphanedFilesSet.size ===  this.oldOrphanedFilesSet.size;
-            if (!setsareequal) {
-                this.changed = true;
-            } else {
-                this.changed = false;
-            }
             resolve();
         });
     }
@@ -185,19 +175,15 @@ export default class OrphanedfilesManager {
         }).then(() => {
             return this.updateOrphanedFiles();
         }).then(() => {
-            if (!this.changed) {
-            } else {
-                // Only render Body if orphaned files changed
                 this.bodyDiv.classList.remove('hidden');
                 this.renderBody();
-            }
         });
-        this.changed = false;
     }
 
     renderBody() {
         // console.log("renderBody");
-        // console.log("this.changed", this.changed);
+        // console.log("this.oldOrphanedFilesSet", this.oldOrphanedFilesSet);
+        // console.log("this.orphanedFilesSet", this.orphanedFilesSet);
         const websitesettings = Array();
         // Just for documentation purpose: We can access settings by two different ways.
         // We can access Options-Object or the data stored during construction.
