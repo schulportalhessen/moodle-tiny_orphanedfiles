@@ -36,6 +36,7 @@ $plugin->component = 'tiny_orphanedfiles';
 $plugin->supported = [
         // Support from the Moodle 4.0.1.
         401,
-        // To the Moodle 4.0.1 series. // ToDo: test the plugin with moodle 4.0.2 and 4.0.3
+        // To the Moodle 4.0.1 series.
+        // ToDo: test the plugin with moodle 4.0.2 and 4.0.3.
         401,
 ];
