@@ -173,6 +173,7 @@ export default class OrphanedfilesManager {
         deleteDraftFiles(draftItemId, files).then(() => {
             // Mark deleted files and render body.
             for (const file of files) {
+                // ToDo: Why do we need deletedFilesSet??????????
                 this.deletedFilesSet.add(this._get_file_identifier(file));
             }
             this.update();
@@ -275,7 +276,7 @@ export default class OrphanedfilesManager {
             for (const file of files) {
                 const select = document.querySelector(`#orphaned-files-${this.elementId} .orphaned-row.${file.className} input`);
                 if (select.checked) {
-                    selectedFiles.push([file]);
+                    selectedFiles.push({'filepath': file.filepath, 'filename': file.filename});
                 }
             }
             this.deleteSelectedFiles(selectedFiles);
