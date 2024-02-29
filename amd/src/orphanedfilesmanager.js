@@ -213,9 +213,9 @@ export default class OrphanedfilesManager {
                 }).catch((error) => displayException(error));
             }
         } else {
-            // Todo: IF number orphanedfiles is 0 but the user has used the undo then there is still a table
-            // in the dom that contains a list of files but this tablelist is now set as hidden.
-            // Maybe we better also remove this content from the dom.
+            // In case of an undo the numberoforphanedfiles might get 0 during a table with orphand file is visible.
+            // To be cheap in this case we do NOT remove the table but set table like in all other cases where
+            // numberoforphanedfiles = 0 to hidden.
             this.bodyDiv.classList.add('hidden');
         }
         return null;
