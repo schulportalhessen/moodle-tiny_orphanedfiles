@@ -167,7 +167,6 @@ export default class OrphanedfilesManager {
      * @param {array} files List of all selected files
      */
     deleteSelectedFiles(files) {
-        // ToDo: Does not work anymore ... Repairing is needed
         const draftItemId = Options.getDraftItemId(this.editor);
         // call deleteDraftFiles from repository.js
         deleteDraftFiles(draftItemId, files).then(() => {
