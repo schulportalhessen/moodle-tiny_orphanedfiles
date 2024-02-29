@@ -77,7 +77,7 @@ class deletedraftfiles extends \external_api {
     public static function execute($draftitemid, $files): array {
         global $USER;
         ['draftItemId' => $draftitemid, 'files' => $files] =
-                self::validate_parameters(self::execute_parameters(), ['draftItemId'=> $draftitemid, 'files' => $files]);
+                self::validate_parameters(self::execute_parameters(), ['draftItemId' => $draftitemid, 'files' => $files]);
         $usercontext = \context_user::instance($USER->id);
         self::validate_context($usercontext);
 

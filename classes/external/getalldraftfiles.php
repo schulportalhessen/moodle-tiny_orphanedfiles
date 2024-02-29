@@ -71,7 +71,7 @@ class getalldraftfiles extends \external_api {
      */
     public static function execute($draftitemid): array {
         global $USER;
-        ['draftItemId'=> $draftitemid] = self::validate_parameters(self::execute_parameters(), ['draftItemId'=> $draftitemid]);
+        ['draftItemId' => $draftitemid] = self::validate_parameters(self::execute_parameters(), ['draftItemId' => $draftitemid]);
         $usercontext = \context_user::instance($USER->id);
         self::validate_context($usercontext);
         /* file_get_all_files_in_draftarea gets all files in draftarea (even from subfolders */
