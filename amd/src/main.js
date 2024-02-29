@@ -37,7 +37,14 @@ export const register = (editor) => {
 
     editor.on('input', () => {
         orphanedfilesmanager.update();
+    });
 
+    editor.on('Undo', () => {
+        orphanedfilesmanager.update();
+    });
+
+    editor.on('Redo', () => {
+        orphanedfilesmanager.update();
     });
 
     editor.on('focus', () => {
