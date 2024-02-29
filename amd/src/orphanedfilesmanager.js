@@ -85,7 +85,9 @@ export default class OrphanedfilesManager {
     updateAllFiles() {
         return new Promise(async (resolve, reject) => {
             try {
-                const result = await this.getAllDraftFilesInSubdirectories();
+                const draftItemId = Options.getDraftItemId(this.editor);
+                const fileObject = await getAllDraftFiles(draftItemId);
+                const result = JSON.parse(fileObject.files);
                 this.allFilesSet = new Set([...result]); // generate set from resultArray
                 resolve(result); // Erfolgreich aufgelöst
             } catch (error) {
@@ -138,7 +140,6 @@ export default class OrphanedfilesManager {
      * @returns {*[]}
      */
     updateOrphanedFiles() {
-
         return new Promise((resolve) => {
             this.oldOrphanedFilesSet = this.orphanedFilesSet;
             this.orphanedFilesSet = new Set([...this.allFilesSet].filter(element => !this.usedFilesSet.has(element)));
@@ -153,18 +154,6 @@ export default class OrphanedfilesManager {
             }
             resolve();
         });
-    }
-
-    /**
-     * Gets all draft files in editor context in a given directory and all
-     * subdirectories.
-     *
-     * @returns {string[]} A list of files
-     */
-    async getAllDraftFilesInSubdirectories() {
-        const draftItemId = Options.getDraftItemId(this.editor);
-        const fileObject = await getAllDraftFiles(draftItemId);
-        return JSON.parse(fileObject.files);
     }
 
     deleteSelectedFiles(files) {
