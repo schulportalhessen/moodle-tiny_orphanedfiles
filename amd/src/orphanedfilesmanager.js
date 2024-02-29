@@ -82,6 +82,11 @@ export default class OrphanedfilesManager {
 
     }
 
+    /**
+     * Updates the static allFilesSet
+     *
+     * @returns {*}
+     */
     updateAllFiles() {
         return new Promise(async (resolve, reject) => {
             try {
@@ -143,9 +148,9 @@ export default class OrphanedfilesManager {
         return new Promise((resolve) => {
             this.oldOrphanedFilesSet = this.orphanedFilesSet;
             this.orphanedFilesSet = new Set([...this.allFilesSet].filter(element => !this.usedFilesSet.has(element)));
-            // ToDo: Compare the sets if there are changes and if update the rendering is needed.
-            // console.log("oldOrphanedFilesSet" , this.oldOrphanedFilesSet);
-            // console.log("orphanedFilesSet" , this.orphanedFilesSet);
+            // We think that in mostly all cases the sizes are different if we have to render the orphandfiles list.
+            // There might be some very few other cases.
+            // eg copy an image from the clipboard substituting an image in the editor and then perform an undo.
             const setsareequal = this.orphanedFilesSet.size ===  this.oldOrphanedFilesSet.size;
             if (!setsareequal) {
                 this.changed = true;
@@ -156,7 +161,13 @@ export default class OrphanedfilesManager {
         });
     }
 
+    /**
+     * Deletes the selected files.
+     *
+     * @param {array} files List of all selected files
+     */
     deleteSelectedFiles(files) {
+        // ToDo: Does not work anymore ... Repairing is needed
         const draftItemId = Options.getDraftItemId(this.editor);
         // call deleteDraftFiles from repository.js
         deleteDraftFiles(draftItemId, files).then(() => {
@@ -168,6 +179,11 @@ export default class OrphanedfilesManager {
         });
     }
 
+    /**
+     * Updates static usedFiles and orphanedFiles and call to renderBody if orphanedFiles list changes
+     *
+     * @returns {null}
+     */
     update() {
         this.updateAllFiles().then(() => {
             return this.updateUsedFiles();
@@ -184,6 +200,11 @@ export default class OrphanedfilesManager {
         this.changed = false;
     }
 
+    /**
+     * Renders the list of orphaned files or in case of orphanedfilescounteronly renders just the number of orhaned files
+     *
+     * @returns {null}
+     */
     renderBody() {
         const numberoforphanedfiles = this.orphanedFilesSet.size;
         if (numberoforphanedfiles !== 0) {
