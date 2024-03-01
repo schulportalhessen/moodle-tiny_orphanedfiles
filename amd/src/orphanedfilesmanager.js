@@ -39,7 +39,8 @@ export default class OrphanedfilesManager {
         this.editorContainer = editor.editorContainer;
         // Read from options.js
         this.draftItemId = params.draftItemId;
-        this.userContextId = params.userContextId; // user context from moodle
+        // userContextId from moodle
+        this.userContextId = params.userContextId;
         // Read websitesetting from options.js
         this.showReferenceCountEnabled = params.showReferenceCountEnabled;
         this.orphanedFilesCounterOnly = params.orphanedFilesCounterOnly;
@@ -87,13 +88,13 @@ export default class OrphanedfilesManager {
      * @returns {*}
      */
     updateAllFiles() {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             try {
                 const draftItemId = Options.getDraftItemId(this.editor);
                 const fileObject = await getAllDraftFiles(draftItemId);
                 const result = JSON.parse(fileObject.files);
-                this.allFilesSet = new Set([...result]); // generate set from resultArray
-                resolve(result); // Erfolgreich aufgelöst
+                this.allFilesSet = new Set([...result]); // Generate set from resultArray
+                resolve(result);
             } catch (error) {
                 reject(error); // Bei einem Fehler abgelehnt
             }
@@ -107,7 +108,7 @@ export default class OrphanedfilesManager {
      * @returns {array}
      */
     updateUsedFiles() {
-        return new Promise(async (resolve) => {
+        return new Promise(async(resolve) => {
             const editorContent = this.editor.getContent();
             const baseUrl = `${this.wwwRoot}/draftfile.php/${this.userContextId}/user/draft/${this.draftItemId}/`;
             const pattern = new RegExp("[\"']" + baseUrl.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') +
@@ -120,7 +121,7 @@ export default class OrphanedfilesManager {
             for (const file of this.allFilesSet) {
                 file.className = 'file-' + i;
                 // Add individual information about the file e.g. dimensions, formated last modified date, ...
-                if (file.image_width && file.image_height ) {
+                if (file.image_width && file.image_height) {
                     file.dimensions = `${file.image_width}✕${file.image_height}`;
                 } else {
                     file.dimensions = '';
@@ -189,8 +190,7 @@ export default class OrphanedfilesManager {
         }).then(() => {
             return this.updateOrphanedFiles();
         }).then(() => {
-            if (!this.changed) {
-            } else {
+            if (this.changed) {
                 // Only render Body if orphaned files changed
                 this.bodyDiv.classList.remove('hidden');
                 this.renderBody();
