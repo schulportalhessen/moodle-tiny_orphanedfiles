@@ -263,15 +263,21 @@ export default class OrphanedfilesManager {
      * @param {array} files The list of files which are display in Orphaned Files Table.
      */
     registerListener(files) {
+        // Add listener to the trash icons to be able to delete one single file.
         files.forEach((file) => {
             const deleteButton = document.querySelector(`#orphaned-files-${this.elementId} .orphaned-row.${file.className} span`);
             deleteButton.addEventListener("click", () => {
-                this.deleteSelectedFiles([{'filepath': file.filepath, 'filename': file.filename}]);
+                const singleFile = [];
+                singleFile.push({'filepath': file.filepath, 'filename': file.filename});
+                // We can use deleteSelectedFiles() to delete a single file triggered by the trash icon click.
+                this.deleteSelectedFiles(singleFile);
             });
         });
-        const deleteSelected = document.querySelector(`#orphaned-files-${this.elementId} button.deleteselected`);
+
+        // Add listener to the delete button to look for each selected file that will be deleted.
         let selectedFiles = [];
-        deleteSelected.addEventListener("click", () => {
+        const deleteSelectedButton = document.querySelector(`#orphaned-files-${this.elementId} button.deleteselected`);
+        deleteSelectedButton.addEventListener("click", () => {
             for (const file of files) {
                 const select = document.querySelector(`#orphaned-files-${this.elementId} .orphaned-row.${file.className} input`);
                 if (select.checked) {
