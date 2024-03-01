@@ -28,7 +28,6 @@ import * as Options from "./options";
 import Templates from 'core/templates';
 import {exception as displayException} from 'core/notification';
 import {deleteDraftFiles, getAllDraftFiles} from "./repository";
-//import {getShowReferencecount} from "./options";
 
 /**
  * OrphanedfilesManager is created in main.js
@@ -46,10 +45,10 @@ export default class OrphanedfilesManager {
         this.orphanedFilesCounterOnly = params.orphanedFilesCounterOnly;
         this.wwwRoot = params.wwwRoot;
         this.baseUrl = {};
-        this.allFilesSet = new Set(); // files
+        this.allFilesSet = new Set(); // Files
         this.usedFilesSet = new Set(); // Set of file strings(!)
-        this.orphanedFilesSet = new Set(); // files
-        this.deletedFilesSet = new Set(); // files
+        this.orphanedFilesSet = new Set(); // Files
+        this.deletedFilesSet = new Set(); // Files
         this.oldOrphanedFilesSet = new Set();
         this.changed = false;
     }
@@ -113,7 +112,7 @@ export default class OrphanedfilesManager {
             const baseUrl = `${this.wwwRoot}/draftfile.php/${this.userContextId}/user/draft/${this.draftItemId}/`;
             const pattern = new RegExp("[\"']" + baseUrl.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') +
                 "(?<filename>.+?)[\\?\"']", 'gm');
-            //Get all used files in editor by searching editor content for filepatterns
+            // Get all used files in editor by searching editor content for filepatterns
             const _usedFilesSet = new Set([...editorContent.matchAll(pattern)].map((match) => '/' +
                 decodeURIComponent(match.groups.filename)));
             let i = 1;
@@ -128,7 +127,7 @@ export default class OrphanedfilesManager {
                 }
                 const newDate = new Date(file.datemodified * 1000);
                 const dateString = newDate.toLocaleString();
-                file.datemodified_formated = dateString;
+                file.datemodifiedFormated = dateString;
 
                 if (_usedFilesSet.has(file.filepath + file.filename)) {
                     this.usedFilesSet.add(file);
@@ -150,8 +149,8 @@ export default class OrphanedfilesManager {
             this.orphanedFilesSet = new Set([...this.allFilesSet].filter(element => !this.usedFilesSet.has(element)));
             // We think that in mostly all cases the sizes are different if we have to render the orphandfiles list.
             // There might be some very few other cases.
-            // eg copy an image from the clipboard substituting an image in the editor and then perform an undo.
-            const setsareequal = this.orphanedFilesSet.size ===  this.oldOrphanedFilesSet.size;
+            // Eg copy an image from the clipboard substituting an image in the editor and then perform an undo.
+            const setsareequal = this.orphanedFilesSet.size === this.oldOrphanedFilesSet.size;
             if (!setsareequal) {
                 this.changed = true;
             } else {
@@ -168,7 +167,7 @@ export default class OrphanedfilesManager {
      */
     deleteSelectedFiles(files) {
         const draftItemId = Options.getDraftItemId(this.editor);
-        // call deleteDraftFiles from repository.js
+        // Call deleteDraftFiles from repository.js
         deleteDraftFiles(draftItemId, files).then(() => {
             // Mark deleted files and render body.
             for (const file of files) {

@@ -58,8 +58,8 @@ export const register = (editor) => {
             contextId: getContextId(editor),
             draftItemId: getDraftItemId(editor),
 
-            // collect more settings defined in options.js
-            userContextId: getUserContextId(editor), // user context from moodle plugininfo
+            // Collect more settings defined in options.js eg userContextId from moodle plugininfo
+            userContextId: getUserContextId(editor),
             showReferenceCountEnabled: getShowReferencecountEnabled(editor),
             orphanedFilesCounterOnly: getOrphanedFilesCounterOnly(editor),
         };

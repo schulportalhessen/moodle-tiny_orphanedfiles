@@ -47,7 +47,7 @@ export const getAllDraftFiles = (draftItemId) => Ajax.call([{
  * @param {array} files a list of files with the structure [(filepath1, filename1), (filepath2, filename2)...
  * @returns {*}
  */
-export const deleteDraftFiles = (draftItemId, files) =>  Ajax.call([{
+export const deleteDraftFiles = (draftItemId, files) => Ajax.call([{
     methodname: 'tiny_orphanedfiles_deletedraftfiles',
     // Args is an array, so we need a multiple_structure
     args: {
