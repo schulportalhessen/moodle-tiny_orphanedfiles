@@ -30,7 +30,7 @@ import {ensureEditorIsValid} from 'editor_tiny/utils';
 
 // From editor_tiny/options.js
 const initialisedOptionName = getPluginOptionName(pluginName, 'initialised');
-//load userContextId from plugininfo from moodle.
+// Load userContextId from plugininfo from moodle.
 const userContextIdName = getPluginOptionName(pluginName, 'userContextId');
 
 // From our options.js
