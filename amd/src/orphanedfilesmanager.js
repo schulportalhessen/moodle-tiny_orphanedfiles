@@ -39,7 +39,7 @@ export default class OrphanedfilesManager {
         this.editorContainer = editor.editorContainer;
         // Read from options.js
         this.draftItemId = params.draftItemId;
-        // userContextId from moodle
+        // Read userContextId from moodle
         this.userContextId = params.userContextId;
         // Read websitesetting from options.js
         this.showReferenceCountEnabled = params.showReferenceCountEnabled;
@@ -89,17 +89,19 @@ export default class OrphanedfilesManager {
      */
     updateAllFiles() {
         return new Promise(async(resolve, reject) => {
-            try {
-                const draftItemId = Options.getDraftItemId(this.editor);
-                const fileObject = await getAllDraftFiles(draftItemId);
-                const result = JSON.parse(fileObject.files);
-                this.allFilesSet = new Set([...result]); // Generate set from resultArray
-                resolve(result);
-            } catch (error) {
-                reject(error); // Bei einem Fehler abgelehnt
-            }
+            const draftItemId = Options.getDraftItemId(this.editor);
+            getAllDraftFiles(draftItemId)
+                .then(fileObject => {
+                    const result = JSON.parse(fileObject.files);
+                    this.allFilesSet = new Set([...result]); // Generate set from resultArray
+                    resolve(result);
+                    return null;
+                }).catch(error => {
+                    reject(error); // Bei einem Fehler abgelehnt
+            });
         });
     }
+
 
     /**
      * Returns the used Files as array
@@ -164,25 +166,20 @@ export default class OrphanedfilesManager {
     /**
      * Deletes the selected files.
      *
-     * @param {array} files List of all selected files
+     * @param {array} files List of all selected files @returns {null}
      */
     deleteSelectedFiles(files) {
         const draftItemId = Options.getDraftItemId(this.editor);
-        // Call deleteDraftFiles from repository.js
         deleteDraftFiles(draftItemId, files).then(() => {
-            // Mark deleted files and render body.
-            for (const file of files) {
-                // ToDo: Why do we need deletedFilesSet??????????
-                this.deletedFilesSet.add(this._get_file_identifier(file));
-            }
             this.update();
+            return null;
+        }).catch(() => {
+            console.log("Error while deleting files");
         });
     }
 
     /**
      * Updates static usedFiles and orphanedFiles and call to renderBody if orphanedFiles list changes
-     *
-     * @returns {null}
      */
     update() {
         this.updateAllFiles().then(() => {
