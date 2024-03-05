@@ -243,18 +243,6 @@ export default class OrphanedfilesManager {
     }
 
     /**
-     * Get the file identifier with the correct draftidemid tha is used by the editor.
-     *
-     * @param {array} file The file we need the unique fileidentifier from.
-     * @returns {string}
-     * @private
-     */
-    _get_file_identifier(file) {
-        const draftItemId = Options.getDraftItemId(this.editor);
-        return draftItemId + '-' + file['filepath'] + '-' + file['filename'];
-    }
-
-    /**
      * Add Listener to dynamic items in Orphaned-Files-Table e.g. Delete Buttons
      * @param {array} files The list of files which are display in Orphaned Files Table.
      */
