@@ -97,7 +97,7 @@ export default class OrphanedfilesManager {
                     resolve(result);
                     return null;
                 }).catch(error => {
-                    reject(error); // Bei einem Fehler abgelehnt
+                reject(error); // Bei einem Fehler abgelehnt
             });
         });
     }
@@ -192,10 +192,12 @@ export default class OrphanedfilesManager {
                 this.bodyDiv.classList.remove('hidden');
                 this.renderBody();
             }
+            return null;
+        }).catch(() => {
+            // No tiny editor present
         });
         this.changed = false;
     }
-
     /**
      * Renders the list of orphaned files or in case of orphanedfilescounteronly renders just the number of orhaned files
      *
@@ -212,6 +214,9 @@ export default class OrphanedfilesManager {
                 };
                 Templates.renderForPromise('tiny_orphanedfiles/orphanedfilescounteronly', context).then(({html, js}) => {
                     Templates.replaceNodeContents(`.orphaned-files-content-${this.elementId}`, html, js);
+                    return null;
+                }).catch(() => {
+                    // No tiny editor present
                 });
             } else {
                 const websitesettings = Array();
@@ -228,6 +233,7 @@ export default class OrphanedfilesManager {
                 // Display Orphaned-Files-Table
                 Templates.renderForPromise('tiny_orphanedfiles/orphanedfiles', context).then(({html, js}) => {
                     Templates.replaceNodeContents(`.orphaned-files-content-${this.elementId}`, html, js);
+                    return null;
                 }).then(() => {
                     // Add Listener to dynamic items in Orphaned-Files-Table e.g. Delete Buttons
                     return this.registerListener(Array.from(this.orphanedFilesSet));
