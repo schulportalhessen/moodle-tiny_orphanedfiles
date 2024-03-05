@@ -88,7 +88,7 @@ export default class OrphanedfilesManager {
      * @returns {*}
      */
     updateAllFiles() {
-        return new Promise(async(resolve, reject) => {
+        return new Promise((resolve, reject) => {
             const draftItemId = Options.getDraftItemId(this.editor);
             getAllDraftFiles(draftItemId)
                 .then(fileObject => {
