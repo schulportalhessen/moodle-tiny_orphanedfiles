@@ -110,7 +110,7 @@ export default class OrphanedfilesManager {
      * @returns {array}
      */
     updateUsedFiles() {
-        return new Promise(async(resolve) => {
+        return new Promise((resolve) => {
             const editorContent = this.editor.getContent();
             const baseUrl = `${this.wwwRoot}/draftfile.php/${this.userContextId}/user/draft/${this.draftItemId}/`;
             const pattern = new RegExp("[\"']" + baseUrl.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') +
