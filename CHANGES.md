@@ -1,5 +1,18 @@
 Release Notes
 
+##### 1.0.3 (Build 2024030102)
+New features / improvements:
+
+* add this file CHANGES.md for documentation
+
+
+Big fixes:
+
+* fix linter issues
+* remove unused code
+
+
+
 ##### 1.0.2 (Build 2024030101)
 New features / improvements:
 
