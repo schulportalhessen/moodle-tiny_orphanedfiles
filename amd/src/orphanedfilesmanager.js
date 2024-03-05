@@ -174,7 +174,7 @@ export default class OrphanedfilesManager {
             this.update();
             return null;
         }).catch(() => {
-            console.log("Error while deleting files");
+            // No tiny editor present
         });
     }
 
