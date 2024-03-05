@@ -217,8 +217,8 @@ export default class OrphanedfilesManager {
                 const websitesettings = Array();
                 // Just for documentation purpose: We can access settings by two different ways.
                 // We can access Options-Object or the data stored during construction.
-                websitesettings['showreferencecountenabled'] = this.showReferenceCountEnabled;
-                websitesettings['orphanedfilescounteronly'] = this.orphanedFilesCounterOnly;
+                websitesettings.showreferencecountenabled = this.showReferenceCountEnabled;
+                websitesettings.orphanedfilescounteronly = this.orphanedFilesCounterOnly;
                 const context = {
                     // Data to be rendered
                     orphanedFiles: Array.from(this.orphanedFilesSet),
