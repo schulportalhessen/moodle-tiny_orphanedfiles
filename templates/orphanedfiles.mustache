@@ -79,11 +79,11 @@
 
 }}
 
-<div class="orphanedfiles-container">
+<div class="tiny_orphanedfiles-container">
     <div class="tiny_orphanedfiles-areaheading">{{numberoforphanedfiles}} {{#str}}areaheading, tiny_orphanedfiles {{/str}}</div>
     <div class="tiny_orphanedfiles-areainfo">{{#str}}areainfo, tiny_orphanedfiles {{/str}}</div>
     <div class="orphaned-table-wrapper table-responsive">
-        <table id="TableID" class="table table-hover table-sm table-bordered tiny_orphanedfiles">
+        <table id="tiny_orphanedfiles_id_table-{{elementId}}" class="tiny_orphanedfiles table table-hover table-sm table-bordered">
             <thead>
             <tr>
                 <th class="select" scope="col" data-sortable="false" data-sort-order=""></th>
@@ -149,6 +149,6 @@
 </div>
 {{#js}}
     require(['tiny_orphanedfiles/tablesorter'], function(tablesorter) {
-    tablesorter.init("TableID");
+    tablesorter.init("tiny_orphanedfiles_id_table-{{elementId}}");
     });
 {{/js}}

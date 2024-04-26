@@ -1,4 +1,9 @@
 Release Notes
+##### 1.0.4 (Build 2024042600)
+New features / improvements:
+
+* add sorting
+* some langfilefixes
 
 ##### 1.0.3 (Build 2024030102)
 New features / improvements:

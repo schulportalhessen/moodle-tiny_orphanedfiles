@@ -230,6 +230,7 @@ export default class OrphanedfilesManager {
                     orphanedFiles: Array.from(this.orphanedFilesSet),
                     numberoforphanedfiles: numberoforphanedfiles,
                     websitesettings: websitesettings,
+                    elementId: this.elementId
                 };
                 // Display Orphaned-Files-Table
                 Templates.renderForPromise('tiny_orphanedfiles/orphanedfiles', context).then(({html, js}) => {
