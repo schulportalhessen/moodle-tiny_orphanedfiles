@@ -135,7 +135,6 @@ export default class OrphanedfilesManager {
                 if (_usedFilesSet.has(file.filepath + file.filename)) {
                     this.usedFilesSet.add(file);
                 }
-                // console.log("file", file);
                 i = i + 1;
             }
             resolve(); // Erfolgreich aufgelöst
