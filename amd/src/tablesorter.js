@@ -14,6 +14,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Tiny orphanedfiles plugin for Moodle.
+ *
+ * @module     tiny_orphanedfiles/plugin
+ * @copyright  2023 Andreas Siebel <andreas.siebel@schulportal.hessen.de>
+ * @copyright  2023 Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @author     2023 Andreas Siebel <andreas.siebel@schulportal.hessen.de>
+ * @author     2023 Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
  *
  * @param {string} tableID
  */
