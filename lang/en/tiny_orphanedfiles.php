@@ -40,10 +40,10 @@ $string['orphanedfilescounteronly_desc'] = 'If enabled, there will be no table b
 $string['pluginname'] = 'Tiny orphaned files';
 $string['showreferencecountenabled'] = 'Show referencecounter';
 $string['showreferencecountenabled_desc'] = 'If enabled, the number of references is shown. ';
-$string['tableheader:lastmodified'] = 'Last modified';
 $string['tableheader:delete'] = '<i class="fa fa-trash" title="Delete this file"></i>';
 $string['tableheader:filename'] = 'Filename';
 $string['tableheader:filepath'] = 'Path';
 $string['tableheader:filesize'] = 'Filesize';
+$string['tableheader:lastmodified'] = 'Last modified';
 $string['tableheader:preview'] = 'Preview';
 $string['tableheader:sort'] = '';
