@@ -27,16 +27,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2024021501;
+$plugin->version   = 2024042600;
 $plugin->requires  = 2022111800;
 // The plugin is a beta version.
-$plugin->maturity = MATURITY_BETA;
-$plugin->release   = '1.0.0-beta';
+$plugin->maturity = MATURITY_STABLE;
+$plugin->release   = '1.0.4';
 $plugin->component = 'tiny_orphanedfiles';
-$plugin->supported = [
-        // Support from the Moodle 4.0.1.
-        401,
-        // To the Moodle 4.0.1 series.
-        // ToDo: test the plugin with moodle 4.0.2 and 4.0.3.
-        401,
-];
+// ToDo: test the plugin with moodle 4.0.2 and 4.0.3.
+$plugin->supported = [401, 401];

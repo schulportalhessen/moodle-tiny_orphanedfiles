@@ -79,20 +79,20 @@
 
 }}
 
-<div class="orphanedfiles-container">
+<div class="tiny_orphanedfiles-container">
     <div class="tiny_orphanedfiles-areaheading">{{numberoforphanedfiles}} {{#str}}areaheading, tiny_orphanedfiles {{/str}}</div>
     <div class="tiny_orphanedfiles-areainfo">{{#str}}areainfo, tiny_orphanedfiles {{/str}}</div>
     <div class="orphaned-table-wrapper table-responsive">
-        <table id="ToDo" class="table table-hover table-sm table-bordered tiny_orphanedfiles">
+        <table id="tiny_orphanedfiles_id_table-{{elementId}}" class="tiny_orphanedfiles table table-hover table-sm table-bordered">
             <thead>
             <tr>
-                <td class="select"></td>
-                <td class="delete"></td>
-                <td class="preview"></td>
-                <th scope="col" class="filename">{{#str}}tableheader:filename, tiny_orphanedfiles {{/str}}</th>
-                <th scope="col" class="filesize">{{#str}}tableheader:filesize, tiny_orphanedfiles {{/str}}</th>
-                <th scope="col" class="filepath">{{#str}}tableheader:filepath, tiny_orphanedfiles {{/str}}</th>
-                <th scope="col" class="lastmodified">{{#str}}tableheader:lastmodified, tiny_orphanedfiles {{/str}}</th>
+                <th class="select" scope="col" data-sortable="false" data-sort-order=""></th>
+                <th class="delete" scope="col" data-sortable="false" data-sort-order=""></th>
+                <th class="preview" scope="col" data-sortable="false" data-sort-order=""></th>
+                <th class="filename" scope="col" data-sortable="true" data-sort-order="" >{{#str}}tableheader:filename, tiny_orphanedfiles {{/str}}</th>
+                <th class="filesize" scope="col" data-sortable="true" data-sort-order="" >{{#str}}tableheader:filesize, tiny_orphanedfiles {{/str}}</th>
+                <th class="filepath" scope="col" data-sortable="true" data-sort-order="" >{{#str}}tableheader:filepath, tiny_orphanedfiles {{/str}}</th>
+                <th class="lastmodified" scope="col" data-sortable="true" data-sort-order="" >{{#str}}tableheader:lastmodified, tiny_orphanedfiles {{/str}}</th>
             </tr>
             </thead>
 
@@ -100,7 +100,7 @@
             {{#orphanedFiles}}
                 <tr class="orphaned-row {{className}}">
                     <td class="checkbox">
-                        <input  type="checkbox" name="{{filename}}" />
+                        <input type="checkbox" name="{{filename}}" />
                     </td>
                     <td>
                         <span class="delete">
@@ -120,7 +120,7 @@
                     </td>
                     {{/realthumbnail}}
 
-                    <td class='details-filename'>
+                    <td class='details-filename' data-sort='{{filename}}'>
                         <a href="{{url}}">{{filename}}</a>
                         {{#isref}}
                             <div class="details-isreference"><i class="fa fa-reply fa-flip-horizontal" aria-hidden="true" title="isReference"></i></div>
@@ -136,9 +136,9 @@
                         {{/websitesettings.showreferencecountenabled}}
                     </td>
 
-                    <td>{{filesize}}{{#dimensions}}<br>{{.}}{{/dimensions}}</td>
-                    <td>{{filepath}}</td>
-                    <td>{{datemodified_formated}}</td>
+                    <td data-sort='{{size}}'>{{filesize}}{{#dimensions}}<br>{{.}}{{/dimensions}}</td>
+                    <td data-sort='{{filepath}}'>{{filepath}}</td>
+                    <td data-sort='{{datemodified}}'>{{datemodifiedFormated}}</td>
                 </tr>
             {{/orphanedFiles}}
             </tbody>
@@ -147,3 +147,8 @@
     </div>
     <button class="btn btn-primary deleteselected" type="button">{{#str}} deleteselected, tiny_orphanedfiles {{/str}}</button>
 </div>
+{{#js}}
+    require(['tiny_orphanedfiles/tablesorter'], function(tablesorter) {
+    tablesorter.init("tiny_orphanedfiles_id_table-{{elementId}}");
+    });
+{{/js}}

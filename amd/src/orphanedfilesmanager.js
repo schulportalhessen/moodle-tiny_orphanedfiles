@@ -28,7 +28,6 @@ import * as Options from "./options";
 import Templates from 'core/templates';
 import {exception as displayException} from 'core/notification';
 import {deleteDraftFiles, getAllDraftFiles} from "./repository";
-//import {getShowReferencecount} from "./options";
 
 /**
  * OrphanedfilesManager is created in main.js
@@ -40,16 +39,17 @@ export default class OrphanedfilesManager {
         this.editorContainer = editor.editorContainer;
         // Read from options.js
         this.draftItemId = params.draftItemId;
-        this.userContextId = params.userContextId; // user context from moodle
+        // Read userContextId from moodle
+        this.userContextId = params.userContextId;
         // Read websitesetting from options.js
         this.showReferenceCountEnabled = params.showReferenceCountEnabled;
         this.orphanedFilesCounterOnly = params.orphanedFilesCounterOnly;
         this.wwwRoot = params.wwwRoot;
         this.baseUrl = {};
-        this.allFilesSet = new Set(); // files
+        this.allFilesSet = new Set(); // Files
         this.usedFilesSet = new Set(); // Set of file strings(!)
-        this.orphanedFilesSet = new Set(); // files
-        this.deletedFilesSet = new Set(); // files
+        this.orphanedFilesSet = new Set(); // Files
+        this.deletedFilesSet = new Set(); // Files
         this.oldOrphanedFilesSet = new Set();
         this.changed = false;
     }
@@ -88,18 +88,20 @@ export default class OrphanedfilesManager {
      * @returns {*}
      */
     updateAllFiles() {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const draftItemId = Options.getDraftItemId(this.editor);
-                const fileObject = await getAllDraftFiles(draftItemId);
-                const result = JSON.parse(fileObject.files);
-                this.allFilesSet = new Set([...result]); // generate set from resultArray
-                resolve(result); // Erfolgreich aufgelöst
-            } catch (error) {
+        return new Promise((resolve, reject) => {
+            const draftItemId = Options.getDraftItemId(this.editor);
+            getAllDraftFiles(draftItemId)
+                .then(fileObject => {
+                    const result = JSON.parse(fileObject.files);
+                    this.allFilesSet = new Set([...result]); // Generate set from resultArray
+                    resolve(result);
+                    return null;
+                }).catch(error => {
                 reject(error); // Bei einem Fehler abgelehnt
-            }
+            });
         });
     }
+
 
     /**
      * Returns the used Files as array
@@ -108,12 +110,12 @@ export default class OrphanedfilesManager {
      * @returns {array}
      */
     updateUsedFiles() {
-        return new Promise(async (resolve) => {
+        return new Promise((resolve) => {
             const editorContent = this.editor.getContent();
             const baseUrl = `${this.wwwRoot}/draftfile.php/${this.userContextId}/user/draft/${this.draftItemId}/`;
             const pattern = new RegExp("[\"']" + baseUrl.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') +
                 "(?<filename>.+?)[\\?\"']", 'gm');
-            //Get all used files in editor by searching editor content for filepatterns
+            // Get all used files in editor by searching editor content for filepatterns
             const _usedFilesSet = new Set([...editorContent.matchAll(pattern)].map((match) => '/' +
                 decodeURIComponent(match.groups.filename)));
             let i = 1;
@@ -121,14 +123,14 @@ export default class OrphanedfilesManager {
             for (const file of this.allFilesSet) {
                 file.className = 'file-' + i;
                 // Add individual information about the file e.g. dimensions, formated last modified date, ...
-                if (file.image_width && file.image_height ) {
+                if (file.image_width && file.image_height) {
                     file.dimensions = `${file.image_width}✕${file.image_height}`;
                 } else {
                     file.dimensions = '';
                 }
                 const newDate = new Date(file.datemodified * 1000);
                 const dateString = newDate.toLocaleString();
-                file.datemodified_formated = dateString;
+                file.datemodifiedFormated = dateString;
 
                 if (_usedFilesSet.has(file.filepath + file.filename)) {
                     this.usedFilesSet.add(file);
@@ -150,8 +152,8 @@ export default class OrphanedfilesManager {
             this.orphanedFilesSet = new Set([...this.allFilesSet].filter(element => !this.usedFilesSet.has(element)));
             // We think that in mostly all cases the sizes are different if we have to render the orphandfiles list.
             // There might be some very few other cases.
-            // eg copy an image from the clipboard substituting an image in the editor and then perform an undo.
-            const setsareequal = this.orphanedFilesSet.size ===  this.oldOrphanedFilesSet.size;
+            // Eg copy an image from the clipboard substituting an image in the editor and then perform an undo.
+            const setsareequal = this.orphanedFilesSet.size === this.oldOrphanedFilesSet.size;
             if (!setsareequal) {
                 this.changed = true;
             } else {
@@ -164,25 +166,20 @@ export default class OrphanedfilesManager {
     /**
      * Deletes the selected files.
      *
-     * @param {array} files List of all selected files
+     * @param {array} files List of all selected files @returns {null}
      */
     deleteSelectedFiles(files) {
         const draftItemId = Options.getDraftItemId(this.editor);
-        // call deleteDraftFiles from repository.js
         deleteDraftFiles(draftItemId, files).then(() => {
-            // Mark deleted files and render body.
-            for (const file of files) {
-                // ToDo: Why do we need deletedFilesSet??????????
-                this.deletedFilesSet.add(this._get_file_identifier(file));
-            }
             this.update();
+            return null;
+        }).catch(() => {
+            // No tiny editor present
         });
     }
 
     /**
      * Updates static usedFiles and orphanedFiles and call to renderBody if orphanedFiles list changes
-     *
-     * @returns {null}
      */
     update() {
         this.updateAllFiles().then(() => {
@@ -190,16 +187,17 @@ export default class OrphanedfilesManager {
         }).then(() => {
             return this.updateOrphanedFiles();
         }).then(() => {
-            if (!this.changed) {
-            } else {
+            if (this.changed) {
                 // Only render Body if orphaned files changed
                 this.bodyDiv.classList.remove('hidden');
                 this.renderBody();
             }
+            return null;
+        }).catch(() => {
+            // No tiny editor present
         });
         this.changed = false;
     }
-
     /**
      * Renders the list of orphaned files or in case of orphanedfilescounteronly renders just the number of orhaned files
      *
@@ -216,22 +214,27 @@ export default class OrphanedfilesManager {
                 };
                 Templates.renderForPromise('tiny_orphanedfiles/orphanedfilescounteronly', context).then(({html, js}) => {
                     Templates.replaceNodeContents(`.orphaned-files-content-${this.elementId}`, html, js);
+                    return null;
+                }).catch(() => {
+                    // No tiny editor present
                 });
             } else {
                 const websitesettings = Array();
                 // Just for documentation purpose: We can access settings by two different ways.
                 // We can access Options-Object or the data stored during construction.
-                websitesettings['showreferencecountenabled'] = this.showReferenceCountEnabled;
-                websitesettings['orphanedfilescounteronly'] = this.orphanedFilesCounterOnly;
+                websitesettings.showreferencecountenabled = this.showReferenceCountEnabled;
+                websitesettings.orphanedfilescounteronly = this.orphanedFilesCounterOnly;
                 const context = {
                     // Data to be rendered
                     orphanedFiles: Array.from(this.orphanedFilesSet),
                     numberoforphanedfiles: numberoforphanedfiles,
                     websitesettings: websitesettings,
+                    elementId: this.elementId
                 };
                 // Display Orphaned-Files-Table
                 Templates.renderForPromise('tiny_orphanedfiles/orphanedfiles', context).then(({html, js}) => {
                     Templates.replaceNodeContents(`.orphaned-files-content-${this.elementId}`, html, js);
+                    return null;
                 }).then(() => {
                     // Add Listener to dynamic items in Orphaned-Files-Table e.g. Delete Buttons
                     return this.registerListener(Array.from(this.orphanedFilesSet));
@@ -244,18 +247,6 @@ export default class OrphanedfilesManager {
             this.bodyDiv.classList.add('hidden');
         }
         return null;
-    }
-
-    /**
-     * Get the file identifier with the correct draftidemid tha is used by the editor.
-     *
-     * @param {array} file The file we need the unique fileidentifier from.
-     * @returns {string}
-     * @private
-     */
-    _get_file_identifier(file) {
-        const draftItemId = Options.getDraftItemId(this.editor);
-        return draftItemId + '-' + file['filepath'] + '-' + file['filename'];
     }
 
     /**

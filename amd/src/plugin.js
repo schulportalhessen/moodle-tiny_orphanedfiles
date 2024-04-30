@@ -32,25 +32,26 @@ import * as Options from './options';
 import * as main from './main';
 
 // Setup the orphanedfiles Plugin.
-export default new Promise(async(resolve) => {
-
-    const [tinyMCE, pluginMetadata] = await Promise.all([
+export default new Promise((resolve) => {
+    Promise.all([
         getTinyMCE(), getPluginMetadata(component, pluginName),
-    ]);
-
-    // Note: The PluginManager.add function does not accept a Promise.
-    // Any asynchronous code must be run before this point.
-    tinyMCE.PluginManager.add(pluginName, (editor) => {
-        // Register options.
-        Options.register(editor);
-        // The Plugin does not work in wiki because wiki stores files in the same draftarea for every editor.
-        // So we have to check if the page is a wiki page and then do not use the plugin tiny orphanedfiles.
-        if (!document.URL.includes('/mod/wiki/edit.php?pageid')) {
-            // Register the orphanedfilesindicator.js
-            main.register(editor);
-        }
-        return pluginMetadata;
+    ]).then(([tinyMCE, pluginMetadata]) => {
+        // Note: The PluginManager.add function does not accept a Promise.
+        // Any asynchronous code must be run before this point.
+        tinyMCE.PluginManager.add(pluginName, (editor) => {
+            // Register options.
+            Options.register(editor);
+            // The Plugin does not work in wiki because wiki stores files in the same draftarea for every editor.
+            // So we have to check if the page is a wiki page and then do not use the plugin tiny orphanedfiles.
+            if (!document.URL.includes('/mod/wiki/edit.php?pageid')) {
+                // Register the orphanedfilesindicator.js
+                main.register(editor);
+            }
+            return pluginMetadata;
+        });
+        resolve(pluginName);
+        return null;
+    }).catch(() => {
+        // No tiny editor present
     });
-
-    resolve(pluginName);
 });
