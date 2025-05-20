@@ -28,7 +28,7 @@
 /**
  * Upgrade steps.
  *
- * @param $oldversion $string that is stored in the database
+ * @param string $oldversion that is stored in the database
  * @return true
  * @throws coding_exception
  * @throws dml_exception
