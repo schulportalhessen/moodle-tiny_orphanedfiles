@@ -206,7 +206,7 @@ export default class OrphanedfilesManager {
     deleteSelectedFiles(files) {
         const draftItemId = Options.getDraftItemId(this.editor);
         deleteDraftFiles(draftItemId, files).then(() => {
-            this.update();
+            this.update(true);
             return null;
         }).catch(() => {
             // No tiny editor present
@@ -215,12 +215,14 @@ export default class OrphanedfilesManager {
 
     /**
      * Updates static usedFiles and orphanedFiles and call to renderBody if orphanedFiles list changes
+     *
+     * @param {bool} forceChanged true if the user deleted a draft file with a click in trash icon. (needed for file-deletion)
      */
-    update() {
+    update(forceChanged = false) {
         // Call updateUsedFilenamesInEditor to proof for changes in editor content
         this.updateUsedFilenamesInEditor();
 
-        if (!this.editorFilenamesHaveChanged) {
+        if (!forceChanged && !this.editorFilenamesHaveChanged) {
             return;
         }
 
