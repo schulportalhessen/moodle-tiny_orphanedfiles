@@ -214,7 +214,7 @@ export default class OrphanedfilesManager {
     }
 
     /**
-     * Updates static usedFiles and orphanedFiles and call to renderBody if orphanedFiles list changes
+     * Updates static usedFiles and orphanedFiles and call to renderBody if orphanedFiles list changes.
      *
      * @param {bool} forceChanged true if the user deleted a draft file with a click in trash icon. (needed for file-deletion)
      */
