@@ -27,9 +27,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2025052001;
-$plugin->requires  = 2022111800;
+$plugin->version   = 2025052800;
+$plugin->requires  = 2023111300;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release   = '2.0.1';
+$plugin->release   = '5.0.0';
 $plugin->component = 'tiny_orphanedfiles';
-$plugin->supported = [401, 500];
+$plugin->supported = [500, 500];

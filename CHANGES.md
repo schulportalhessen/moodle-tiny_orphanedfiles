@@ -1,6 +1,9 @@
 Release Notes
+##### 5.0.0 (Build 2025052800)
 
-Release Notes
+- New README.md
+- bump version for moodle 500
+
 ##### 2.0.0 (Build 2025052000)
 New features / improvements:
 
