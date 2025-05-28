@@ -37,7 +37,7 @@
  * @throws upgrade_exception
  */
 function xmldb_tiny_orphanedfiles_upgrade($oldversion) {
-    if ($oldversion < 2025052800) {
+    if ($oldversion < 2025052001) {
         // Set capability for manager role.
         $roleid = get_archetype_roles('manager')[0]->id ?? null;
         if ($roleid) {
@@ -46,6 +46,10 @@ function xmldb_tiny_orphanedfiles_upgrade($oldversion) {
                 $roleid,
                 context_system::instance()->id);
         }
+        upgrade_plugin_savepoint(true, 2025052001, 'tiny', 'orphanedfiles');
+    }
+    if ($oldversion < 2025052800) {
+        // Nothing to do because 2025052001 already sets the new capability
         upgrade_plugin_savepoint(true, 2025052800, 'tiny', 'orphanedfiles');
     }
     return true;
