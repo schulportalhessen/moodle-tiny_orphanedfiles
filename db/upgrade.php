@@ -49,7 +49,7 @@ function xmldb_tiny_orphanedfiles_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2025052001, 'tiny', 'orphanedfiles');
     }
     if ($oldversion < 2025052800) {
-        // Nothing to do because 2025052001 already sets the new capability
+        // Nothing to do because 2025052001 already sets the new capability.
         upgrade_plugin_savepoint(true, 2025052800, 'tiny', 'orphanedfiles');
     }
     return true;
