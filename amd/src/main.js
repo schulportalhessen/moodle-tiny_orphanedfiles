@@ -66,6 +66,6 @@ export const register = (editor) => {
 
         orphanedfilesmanager = new OrphanedFilesManager(params, editor);
         orphanedfilesmanager.createOrphanedArea();
-        orphanedfilesmanager.update();
+        orphanedfilesmanager.update(true);
     });
 };
