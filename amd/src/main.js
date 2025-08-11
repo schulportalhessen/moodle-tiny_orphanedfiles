@@ -48,7 +48,7 @@ export const register = (editor) => {
     });
 
     editor.on('focus', () => {
-        orphanedfilesmanager.update();
+        orphanedfilesmanager.update(true);
     });
 
     editor.on('init', () => {
